@@ -1,20 +1,26 @@
-// Authentication middleware to verify user is logged in
+const jwt = require("jsonwebtoken");
+
 const authMiddleware = (req, res, next) => {
   try {
-    // In a real application, this would verify JWT token
-    // For now, we'll assume user info comes from the request
-    // This is a placeholder - implement with your actual auth logic
-    
-    const user = req.user;
+    const token = req.header("Authorization");
 
-    if (!user) {
-      return res.status(401).json({ message: 'Not authenticated. Please login.' });
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: "No token, authorization denied"
+      });
     }
 
-    // User is authenticated, proceed
+    const decoded = jwt.verify(token, "secretkey");
+
+    req.user = decoded;
+
     next();
   } catch (error) {
-    return res.status(401).json({ message: 'Authentication failed', error: error.message });
+    res.status(401).json({
+      success: false,
+      message: "Token is not valid"
+    });
   }
 };
 
