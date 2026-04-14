@@ -1,22 +1,60 @@
 const express = require("express");
 const router = express.Router();
-const authMiddleware = require("../middleware/authMiddleware");
 const Product = require("../models/Product");
+const authMiddleware = require("../middleware/authMiddleware");
+const isAdmin = require("../middleware/adminMiddleware");
 
-// GET all products (protected)
+// GET all products (authenticated users)
 router.get("/", authMiddleware, async (req, res) => {
   try {
     const products = await Product.find();
-    res.json(products);
+    res.status(200).json({
+      success: true,
+      products
+    });
   } catch (error) {
-    res.status(500).send("Error fetching products");
+    res.status(500).json({
+      success: false,
+      message: "Error fetching products"
+    });
   }
 });
 
-// POST add product (protected)
-router.post("/add", authMiddleware, async (req, res) => {
+// GET single product by ID
+router.get("/:id", authMiddleware, async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found"
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      product
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching product"
+    });
+  }
+});
+
+// ADD product (admin only)
+router.post("/add", authMiddleware, isAdmin, async (req, res) => {
   try {
     const { name, quantity, price, category } = req.body;
+
+    if (!name || !quantity || !price || !category) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing required fields"
+      });
+    }
 
     const newProduct = new Product({
       name,
@@ -25,36 +63,71 @@ router.post("/add", authMiddleware, async (req, res) => {
       category
     });
 
-    await newProduct.save();
+    const savedProduct = await newProduct.save();
 
-    res.status(201).send("Product saved to database");
+    res.status(201).json({
+      success: true,
+      message: "Product added successfully",
+      product: savedProduct
+    });
   } catch (error) {
-    res.status(500).send("Error saving product");
+    res.status(500).json({
+      success: false,
+      message: "Error adding product"
+    });
   }
 });
 
-// UPDATE product (protected)
-router.put("/update/:id", authMiddleware, async (req, res) => {
+// UPDATE product (admin only)
+router.put("/update/:id", authMiddleware, isAdmin, async (req, res) => {
   try {
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
       req.body,
-      { new: true }
+      { new: true, runValidators: true }
     );
 
-    res.json(updatedProduct);
+    if (!updatedProduct) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found"
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Product updated successfully",
+      product: updatedProduct
+    });
   } catch (error) {
-    res.status(500).send("Error updating product");
+    res.status(500).json({
+      success: false,
+      message: "Error updating product"
+    });
   }
 });
 
-// DELETE product (protected)
-router.delete("/delete/:id", authMiddleware, async (req, res) => {
+// DELETE product (admin only)
+router.delete("/delete/:id", authMiddleware, isAdmin, async (req, res) => {
   try {
-    await Product.findByIdAndDelete(req.params.id);
-    res.send("Product deleted");
+    const deletedProduct = await Product.findByIdAndDelete(req.params.id);
+
+    if (!deletedProduct) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found"
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Product deleted successfully"
+    });
   } catch (error) {
-    res.status(500).send("Error deleting product");
+    res.status(500).json({
+      success: false,
+      message: "Error deleting product"
+    });
   }
 });
 
