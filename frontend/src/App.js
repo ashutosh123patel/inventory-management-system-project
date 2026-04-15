@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 import AddProduct from "./pages/AddProduct";
 import EditProduct from "./pages/EditProduct";
@@ -7,14 +9,6 @@ import ProtectedRoute from "./components/ProtectedRoute";
 // Temporary pages (later replace with real ones)
 function Home() {
   return <h2>Dashboard</h2>;
-}
-
-function Login() {
-  return <h2>Login Page</h2>;
-}
-
-function Register() {
-  return <h2>Register Page</h2>;
 }
 
 function App() {
