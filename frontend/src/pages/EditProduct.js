@@ -19,21 +19,22 @@ function EditProduct() {
   const [error, setError] = useState(null); // ✅ Better than alert() for errors
 
   useEffect(() => {
-    if (!isAdmin) return; // ✅ Skip fetch if not admin
-
     const fetchProduct = async () => {
       try {
         const data = await getProductById(id);
         setForm(data);
-      } catch (err) {
-        setError("Error fetching product"); // ✅ Use state instead of alert
+      } catch (error) {
+        alert("Error fetching product");
       } finally {
         setLoading(false);
       }
     };
 
     fetchProduct();
-  }, [id, isAdmin]); // ✅ Added isAdmin as dependency
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+
+    
 
   if (!isAdmin) return <p>Access denied</p>;
   if (loading) return <p>Loading...</p>;
