@@ -22,3 +22,25 @@ Frontend → Vercel
 Final integration + debugging
 
 👉 Basically: You own the backbone of the system
+
+👨‍💻 2. Ashish (Authentication System - Full Stack)
+
+Responsibilities:
+
+Backend:
+authController.js
+authRoutes.js
+User.js model
+Frontend:
+Login.js
+Register.js
+AuthContext.js
+ProtectedRoute.js
+Services:
+authServices.js
+
+👉 Handles:
+
+Login / Register
+JWT flow
+Route protection
