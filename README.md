@@ -44,3 +44,24 @@ authServices.js
 Login / Register
 JWT flow
 Route protection
+
+👨‍💻 3. Chandrashekhar (Product + Inventory Management)
+
+Responsibilities:
+
+Backend:
+productController.js
+productRoutes.js
+Product.js
+Frontend:
+AddProduct.js
+EditProduct.js
+InventoryList.js
+Services:
+productServices.js
+
+👉 Handles:
+
+CRUD operations
+Inventory display
+Stock updates
