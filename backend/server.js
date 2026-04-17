@@ -3,6 +3,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const helmet = require("helmet");
 const morgan = require("morgan");
+const path = require("path");
 
 const connectDB = require("./config/db");
 const errorHandler = require("./middleware/errorMiddleware");
@@ -17,14 +18,12 @@ dotenv.config();
 
 const app = express();
 
-// Dynamic CORS configuration for development and production
 const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:3001",
-  process.env.FRONTEND_URL, // For production (e.g., https://yourdomain.onrender.com)
+  process.env.FRONTEND_URL,
 ].filter(Boolean);
 
-// Middleware
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin)) {
@@ -46,12 +45,11 @@ app.use("/api/v1/sales", salesRoutes);
 app.use("/api/v1/categories", categoryRoutes);
 app.use("/api/v1/reports", reportRoutes);
 
-app.get("/", (req, res) => {
-  res.send("Inventory Management API Running ✅");
-});
+const buildPath = path.join(__dirname, "../frontend/build");
+app.use(express.static(buildPath));
 
-app.use((req, res) => {
-  res.status(404).json({ message: "Route not found" });
+app.get("*", (req, res) => {
+  res.sendFile(path.join(buildPath, "index.html"));
 });
 
 app.use(errorHandler);
