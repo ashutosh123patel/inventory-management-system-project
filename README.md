@@ -65,3 +65,54 @@ productServices.js
 CRUD operations
 Inventory display
 Stock updates
+
+👨‍💻 4. Aryan (Sales + Reports Module)
+
+Responsibilities:
+
+Backend:
+salesController.js
+reportController.js
+salesRoutes.js
+reportRoutes.js
+Sale.js
+Frontend:
+Sales.js
+Reports.js
+Services:
+salesServices.js
+reportServices.js
+
+👉 Handles:
+
+Sales entry
+Analytics / reports
+Business logic
+👨‍💻 5. Chaman (Frontend UI/UX + Layout + Alerts)
+
+Responsibilities:
+
+Components:
+Navbar.js
+Sidebar.js
+Layout.js
+LowStockAlert.js
+Styling:
+styles/Dashboard.css
+index.css
+App Structure:
+App.js
+Routing setup
+
+👉 Handles:
+
+UI design
+Responsiveness
+User experience
+🧠 Smart Collaboration Plan
+🔁 Integration Flow
+Ashutosh sets backend base
+Ashish connects auth frontend ↔ backend
+Chandrashekhar builds inventory module
+Aryan adds analytics
+Chaman makes everything look clean
